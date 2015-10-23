@@ -140,7 +140,7 @@ module AWS
           REST          = /(\S+)/
           LINE_SCANNER  = /#{DATE}|#{QUOTED_STRING}|#{REST}/
           
-          cattr_accessor :decorators
+          class_attribute :decorators
           @@decorators = Hash.new {|hash, key| hash[key] = lambda {|entry| CoercibleString.coerce(entry)}}
           cattr_reader   :fields
           @@fields     = []

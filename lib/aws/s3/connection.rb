@@ -148,7 +148,7 @@ module AWS
         
       module Management #:nodoc:
         def self.included(base)
-          base.cattr_accessor :connections
+          base.class_attribute :connections
           base.connections = {}
           base.extend ClassMethods
         end

@@ -199,55 +199,12 @@ class Module
   end
 end
 
-class Class # :nodoc:
-  def cattr_reader(*syms)
-    syms.flatten.each do |sym|
-      class_eval(<<-EOS, __FILE__, __LINE__)
-        unless defined? @@#{sym}
-          @@#{sym} = nil
-        end
-
-        def self.#{sym}
-          @@#{sym}
-        end
-
-        def #{sym}
-          @@#{sym}
-        end
-      EOS
-    end
-  end
-
-  def cattr_writer(*syms)
-    syms.flatten.each do |sym|
-      class_eval(<<-EOS, __FILE__, __LINE__)
-        unless defined? @@#{sym}
-          @@#{sym} = nil
-        end
-
-        def self.#{sym}=(obj)
-          @@#{sym} = obj
-        end
-
-        def #{sym}=(obj)
-          @@#{sym} = obj
-        end
-      EOS
-    end
-  end
-
-  def cattr_accessor(*syms)
-    cattr_reader(*syms)
-    cattr_writer(*syms)
-  end
-end if Class.instance_methods(false).grep(/^cattr_(?:reader|writer|accessor)$/).empty?
-
 module SelectiveAttributeProxy
   def self.included(klass)
     klass.extend(ClassMethods)
     klass.class_eval(<<-EVAL, __FILE__, __LINE__)
-      cattr_accessor :attribute_proxy
-      cattr_accessor :attribute_proxy_options
+      class_attribute :attribute_proxy
+      class_attribute :attribute_proxy_options
       
       # Default name for attribute storage
       self.attribute_proxy         = :attributes
