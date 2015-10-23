@@ -140,10 +140,9 @@ module AWS
           REST          = /(\S+)/
           LINE_SCANNER  = /#{DATE}|#{QUOTED_STRING}|#{REST}/
           
-          class_attribute :decorators
-          @@decorators = Hash.new {|hash, key| hash[key] = lambda {|entry| CoercibleString.coerce(entry)}}
-          cattr_reader   :fields
-          @@fields     = []
+          class_attribute :decorators, :fields
+          self.decorators = Hash.new {|hash, key| hash[key] = lambda {|entry| CoercibleString.coerce(entry)}}
+          self.fields     = []
           
           class << self
             def field(name, offset, type = nil, &block) #:nodoc:
